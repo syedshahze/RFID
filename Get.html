@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GET API Example</title>
+</head>
+
+<body>
+
+  <h2>Submit Data to API</h2>
+  
+  <!-- Simple form with an input field -->
+  <form id="dataForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    <br><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <br><br>
+    <button type="button" onclick="submitData()">Submit</button>
+  </form>
+
+  <!-- Response area to display API fetched data -->
+  <div id="responseArea" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;">
+    <h3>Response Data:</h3>
+    <pre id="responseData">No data fetched yet.</pre>
+  </div>
+
+  <script>
+    async function submitData() {
+      // Get form data
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      
+      // Define the API endpoint
+      const apiUrl = `http://dev.loftcommercials.com:8000/zempinfort/empinfo?sap-client=310&PERNR=${encodeURIComponent(name)}`;
+      
+      try {
+        // Make a GET request
+        const response = await fetch(apiUrl, {
+          method: "GET"
+        });
+      console.log("Response status:", response.status); // Log the status
+      console.log("Response headers:", response.headers); // Log headers
+
+        // Handle the response
+        if (response.ok) {
+          const result = await response.json();
+          // Display the result in the response area
+          document.getElementById("responseData").textContent = JSON.stringify(result, null, 2);
+        } else {
+          document.getElementById("responseData").textContent = "Failed to retrieve data: " + response.statusText;
+        }
+      } catch (error) {
+        document.getElementById("responseData").textContent = "Error: " + error.message;
+      }
+    }
+  </script>
+
+</body>
+</html>
